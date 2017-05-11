@@ -31,25 +31,17 @@ class Matrix(object):
 
         circles = min(dimension.cols // 2, dimension.rows // 2)
 
-        # move downwards
+        # move downwards and upwards
         for j in range(circles):
             for i in range(j, dimension.rows - 1 - j):
-                    new_matrix[i+1][j] = self.matrix[i][j]
+                new_matrix[i+1][j] = self.matrix[i][j]
+                new_matrix[i][dimension.cols - j - 1] = self.matrix[i + 1][dimension.cols - j - 1]
 
-        # move upwards
-        for j in range(circles):
-            for i in range(j, dimension.rows - j - 1):
-                    new_matrix[i][dimension.cols - j - 1] = self.matrix[i+1][dimension.cols - j - 1]
-
-        # move leftwards
+        # move leftwards and rightwards
         for i in range(circles):
             for j in range(i, dimension.cols - i - 1):
                 new_matrix[i][j] = self.matrix[i][j+1]
-
-        # move rightwards
-        for i in range(circles):
-            for j in range(i, dimension.cols - i - 1):
-                new_matrix[dimension.rows - i - 1][j+1] = self.matrix[dimension.rows - i - 1][j]
+                new_matrix[dimension.rows - i - 1][j + 1] = self.matrix[dimension.rows - i - 1][j]
 
         self.matrix = new_matrix
 
@@ -67,7 +59,7 @@ def parse_input(file_path: str) -> (str, str):
 
 
 def main():
-    filepath = "input"
+    filepath = "input-2"
     dimension, matrix = parse_input(filepath)
     print(dimension)
     print(matrix)
