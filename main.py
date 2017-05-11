@@ -17,7 +17,7 @@ class Matrix(object):
         self.matrix = [[int(num) for num in line.split(' ')] for line in text.splitlines()]
 
     def __str__(self):
-        format = '\n'.join([row.__str__() for row in self.matrix])
+        format = '\n'.join([' '.join(map(str, row)) for row in self.matrix])
         return format
 
     ''' 
