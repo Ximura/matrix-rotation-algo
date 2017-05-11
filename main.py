@@ -26,14 +26,30 @@ class Matrix(object):
     '''
     def rotate(self, dimension: Dimension):
         new_matrix = deepcopy(self.matrix)
-        for i in range(dimension.rows):
-            for j in range(dimension.cols):
-                if j > i and j > 0:  # moving leftward
-                    new_matrix[i][j-1] = self.matrix[i][j]
-                elif j <= i < dimension.rows - 1:  # moving downward
+
+        new_matrix[:][0] = self.matrix[1:][0]
+
+        circles = min(dimension.cols // 2, dimension.rows // 2)
+
+        # move downwards
+        for j in range(circles):
+            for i in range(j, dimension.rows - 1 - j):
                     new_matrix[i+1][j] = self.matrix[i][j]
-                elif 0 < i <= j:  # moving upward
-                    new_matrix[i-1][j] = self.matrix[i][j]
+
+        # move upwards
+        for j in range(circles):
+            for i in range(j, dimension.rows - j - 1):
+                    new_matrix[i][dimension.cols - j - 1] = self.matrix[i+1][dimension.cols - j - 1]
+
+        # move leftwards
+        for i in range(circles):
+            for j in range(i, dimension.cols - i - 1):
+                new_matrix[i][j] = self.matrix[i][j+1]
+
+        # move rightwards
+        for i in range(circles):
+            for j in range(i, dimension.cols - i - 1):
+                new_matrix[dimension.rows - i - 1][j+1] = self.matrix[dimension.rows - i - 1][j]
 
         self.matrix = new_matrix
 
@@ -50,12 +66,16 @@ def parse_input(file_path: str) -> (str, str):
     return Dimension(dimensions), Matrix(matrix)
 
 
-if __name__ == '__main__':
-    filepath = "input-1"
+def main():
+    filepath = "input"
     dimension, matrix = parse_input(filepath)
     print(dimension)
     print(matrix)
 
-    matrix.rotate(dimension)
-    print("---------------")
-    print(matrix)
+    for r in range(dimension.rotation):
+        matrix.rotate(dimension)
+        print("---------------")
+        print(matrix)
+
+if __name__ == '__main__':
+    main()
